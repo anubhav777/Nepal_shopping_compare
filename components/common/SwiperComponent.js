@@ -14,6 +14,7 @@ const styles = StyleSheet.create({
 })
 
 export default class SwiperComponent extends React.Component {
+
     render(){
         return(
             <Swiper

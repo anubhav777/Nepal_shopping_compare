@@ -64,7 +64,7 @@ export default class Couches extends React.Component{
                      color:"#4f4a4a",
                      fontFamily:"Regular"
                  }}>
-                     Full sleeves short dress with three attractive colors and and available in various sizes.
+                    {this.props.description}
                  </Text>
 
 
@@ -80,7 +80,7 @@ export default class Couches extends React.Component{
                          <Text style={{
                              fontSize:15,
                              fontFamily:"Bold"
-                         }}>324.69 USD</Text>
+                         }}>{this.props.price}</Text>
                      </View>
                      <View style={{
                          width:"20%"
