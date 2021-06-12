@@ -22,7 +22,8 @@ export default class New extends React.Component{
                 style={{
                     height:50,
                     width:60,
-                    borderRadius:10
+                    borderRadius:10,
+                    backgroundColor:this.props.color,
                 }}
                />
            </View>

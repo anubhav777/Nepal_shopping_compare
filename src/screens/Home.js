@@ -1,11 +1,21 @@
 import React from 'react'
-import {View,Text,Image,ImageBackground,TouchableOpacity} from 'react-native'
+import {View,Text,Image,ImageBackground,TouchableOpacity,Animated,Button} from 'react-native'
+import * as Font from 'expo-font';
+import AppLoading from 'expo-app-loading';
 import {TextInput,ScrollView} from 'react-native-gesture-handler'
 import Icon from '@expo/vector-icons/Ionicons'
 import Couches from '../common/Couches'
 import New from '../common/New'
 import Best from '../common/Best'
 import axios from 'axios'
+import IGStoryCircle from "expo-instagram-story-circle";
+import Dialog, {  DialogTitle,
+    DialogContent,
+    DialogFooter,
+    DialogButton,
+    SlideAnimation,
+    ScaleAnimation, } from 'react-native-popup-dialog';
+import { Fontisto, MaterialIcons  } from '@expo/vector-icons'; 
 
 export default class Home extends React.Component {
     state={
@@ -1105,13 +1115,31 @@ export default class Home extends React.Component {
                 "name": "amazon"
             }
         ],
-        name:''
+        name:'',
+        sortdisp:true,
+        fontsLoaded: false,
+        darkmode:false,
+        scaleAnimationDialog:false
+
+
     }
+async componentDidMount(){
+    await Font.loadAsync({
+        'MaterialIcons': require('../fonts/MaterialIcons.ttf')
+      });
+      this.setState({ fontsLoaded : true})
+}
 updtvalue = (event) => {  
     // console.log(event.nativeEvent)  
     // const {eventCount, target, text} = event.nativeEvent;
     this.setState({name:event.nativeEvent.text});
   };
+sortdisplay = ()=>{
+    this.setState({sortdisp:!this.state.sortdisp})
+}
+chngdisplay = ()=>{
+    this.setState({darkmode:!this.state.darkmode})
+}
 sendval=(event)=>{
     console.log(event.nativeEvent.text)
     axios.get('http://127.0.0.1:8000/searchdata/',{
@@ -1127,11 +1155,14 @@ sendval=(event)=>{
 
 }
     render(){
+
         return(
+            this.state.fontsLoaded ? 
+
             <ScrollView
             showsVerticalScrollIndicator={false}
             style={{
-                backgroundColor:"#fff",
+                backgroundColor:this.state.darkmode ? "#202a38" : '#ffffff',
                 paddingHorizontal:20
             }}
             >
@@ -1146,7 +1177,8 @@ sendval=(event)=>{
                     }}>
                         <Text style={{
                             fontFamily:"Bold",
-                            fontSize:22
+                            fontSize:22,
+                            color: this.state.darkmode ? '#8a9db0' : 'black'
                         }}>Nepal Shop</Text>
                     </View>
                     <View style={{
@@ -1171,7 +1203,7 @@ sendval=(event)=>{
                         alignItems:"center",
                         elevation:2,
                         width:"85%",
-                        backgroundColor:"#FFF",
+                        backgroundColor: this.state.darkmode ? '#243140' : "#FFF",
                         paddingHorizontal:20,
                         height:35,
                         borderRadius:10,
@@ -1179,14 +1211,15 @@ sendval=(event)=>{
                     }}>
                         <Icon name="ios-search"
                            size={22}
-                           color="#4f4a4a"
+                           color= {this.state.darkmode ? '#7d8fa2': "#4f4a4a" }
                            />
                             <TextInput
                                 placeholder="Search product here  ......"
                                 style={{
                                 fontFamily:"Medium",
                                 paddingHorizontal:10,
-                                fontSize:12
+                                fontSize:12,
+                                color: this.state.darkmode ? '#7f92a4': null
                             }}
                             value={this.state.name}
                             onChange={this.updtvalue}
@@ -1195,28 +1228,104 @@ sendval=(event)=>{
                             </View>
                             
                             
-                            <View style={{
+                            <TouchableOpacity style={{
                                 alignItems:"center",
                                 elevation:2,
                                 width:"15%",
-                                backgroundColor:"#FFF",
+                                backgroundColor:this.state.darkmode ? '#243140' : "#FFF",
                                 marginLeft:5,
                                 height:35,
                                 borderRadius:10,
                                 marginLeft:1,
                                 justifyContent:"center"
-                            }}>
+                            }} onPress={this.sortdisplay}>
                                 <Image
                                 source={require('../images/sort.png')}
                                 style={{
                                     width:18,height:25
                                 }}
                                 />
-                            </View>
+                            </TouchableOpacity>
                    
                 </View>
+
+                <ScrollView style={{display: this.state.sortdisp ? 'flex' : 'none'}}
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    >
+                        <TouchableOpacity style={{width: 48, height: 48, borderRadius: 48/ 2,backgroundColor:'#009688',textAlign: 'center', justifyContent:"center",marginLeft:20}} onPress={()=>{this.setState({scaleAnimationDialog:true})}}>
+                        <Fontisto name="money-symbol" size={24} style={{ paddingEnd: 0,  marginLeft:'25%' }} color="white"   />
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{width: 48, height: 48, borderRadius: 48/ 2, backgroundColor: this.state.darkmode ?  'white' : 'black',textAlign: 'center', justifyContent:"center",marginLeft:20}} onPress={this.chngdisplay}>
+                        <Fontisto name={this.state.darkmode ? 'toggle-on' :"scissors2"} size={24} style={{ paddingEnd: 0, marginLeft:'25%'}} color={this.state.darkmode ? 'black' :"white"}   type='ellipse'/>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{width: 48, height: 48, borderRadius: 48/ 2,backgroundColor:'#eb1561',textAlign: 'center', justifyContent:"center",marginLeft:20}}>
+                        <Fontisto name="spinner-cog" size={24} style={{ paddingEnd: 0,  marginLeft:'25%'}} color="white"   type='ellipse'/>
+                        </TouchableOpacity>
+                        <View style={{width: 48, height: 48, borderRadius: 48/ 2,backgroundColor:'#00bbd5',textAlign: 'center', justifyContent:"center",marginLeft:20}}>
+                        <Fontisto name="person" size={24} style={{ paddingEnd: 0,  marginLeft:'25%'}} color="white"   type='ellipse'/>
+                        </View>
+        <Dialog
+          onTouchOutside={()=>{this.setState({scaleAnimationDialog:false})}}
+          width={0.9}
+          visible={this.state.scaleAnimationDialog}
+          dialogAnimation={new ScaleAnimation()}
+          onHardwareBackPress={() => {
+            this.setState({scaleAnimationDialog:false})
+            console.log('onHardwareBackPress');
+            return true;
+          }}
+          dialogTitle={
+            <DialogTitle
+              title="Scale Animation Dialog Sample"
+              hasTitleBar={false}
+            />
+          }
+          actions={[
+            <DialogButton
+              text="DISMISS"
+              onPress={() => {
+                this.setState({scaleAnimationDialog:false})
+              }}
+              key="button-1"
+            />,
+          ]}>
+          <DialogContent>
+            <View>
+              <Text>
+                Here is an example of scale animation dialog.
+                Close using back button press
+              </Text>
+              <Button
+                title="Close"
+                onPress={() => {
+                    this.setState({scaleAnimationDialog:false})
+                }}
+                key="button-1"
+              />
+            </View>
+          </DialogContent>
+        </Dialog>
+
+                       {/* <IGStoryCircle style={{backgroundColor:'#E77845'}} source={require('../images/darz.png')}  /> */}
+
+                        {/* <New
+                         src={require('../images/darz.png')}
+                         color={'#E77845'}
+                        />
+                        <New
+                        src={require('../images/gyapu.png')}
+                        color={'#00454F'}
+                        />
+                        <New
+                        src={require('../images/tudo.png')}
+                        color={'#FFD96C'}
+                        /> */}
+                    </ScrollView>
+
+                {/* Scroll view container */}
                 {this.state.data.map((new_val,i)=>(
-                    <View>
+                    <View style={{backgroundColor:this.state.darkmode ? "#202a38" : '#ffffff' }}>
                         <View style={{
                     flexDirection:"row",
                     width:"100%",
@@ -1226,7 +1335,7 @@ sendval=(event)=>{
                     <Text style={{
                         fontFamily:"Bold",
                         fontSize:18,
-                        color:"#4f4a4a",
+                        color:this.state.darkmode ? '#8a9db0':"#4f4a4a",
                         textTransform :'capitalize'
                     }}>
                         {new_val.name}
@@ -1241,7 +1350,7 @@ sendval=(event)=>{
                     <Text style={{
                         fontFamily:"Bold",
                         fontSize:9,
-                        color:"#4f4a4a"
+                        color:this.state.darkmode ? '#8a9db0':"#4f4a4a"
                     }}>
                         Good Quality items
                     </Text>
@@ -1256,6 +1365,7 @@ sendval=(event)=>{
                             name={val.discription.substring(0, 13) +"..."}
                             description={val.discription}
                             price={val.price}
+                            mode = {this.state.darkmode}
                             // onPress={()=>this.props.navigation.navigate('Detail')}
                        
                        />
@@ -1360,6 +1470,7 @@ sendval=(event)=>{
 
 
             </ScrollView>
+            : <AppLoading/>
         );
     }
 }

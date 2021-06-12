@@ -10,7 +10,7 @@ export default class Couches extends React.Component{
              onPress={this.props.onPress}
              style={{
                  marginTop:30,
-                 backgroundColor:"#FFF",
+                
                  height:250,
                  width:200,
                  elevation:2,
@@ -18,7 +18,9 @@ export default class Couches extends React.Component{
                  padding:15,
                  marginRight:30,
                  marginLeft:2,
-                 marginBottom:5
+                 marginBottom:5,
+                 backgroundColor: this.props.mode ? '#243140' : '#FFF',
+                 
              }}
             >
                 <Image
@@ -36,7 +38,8 @@ export default class Couches extends React.Component{
                 }}>
                     <Text style={{
                         fontFamily:"Bold",
-                        color:"#4f4a4a",
+                        color: this.props.mode ? '#7f92a4' : "#4f4a4a",
+                        opacity: this.props.mode ? 0.9 : 1,
                         fontSize:12
                     }}>
                         {this.props.name}
@@ -61,7 +64,8 @@ export default class Couches extends React.Component{
                 </View>
                 <Text style={{
                      fontSize:9,
-                     color:"#4f4a4a",
+                     color: this.props.mode ? '#7f92a4' : "#4f4a4a",
+                        opacity: this.props.mode ? 0.6 : 1,
                      fontFamily:"Regular"
                  }}>
                     {this.props.description}
@@ -79,7 +83,9 @@ export default class Couches extends React.Component{
                      }}>
                          <Text style={{
                              fontSize:15,
-                             fontFamily:"Bold"
+                             fontFamily:"Bold",
+                             color: this.props.mode ? '#7f92a4' : "black",
+            
                          }}>{this.props.price}</Text>
                      </View>
                      <View style={{
