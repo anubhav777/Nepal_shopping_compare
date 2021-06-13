@@ -1,5 +1,5 @@
 import React from 'react'
-import {View,Text,Image,ImageBackground,TouchableOpacity,Animated,Button} from 'react-native'
+import {View,Text,Image,ImageBackground,TouchableOpacity,Animated,Button,StyleSheet} from 'react-native'
 import * as Font from 'expo-font';
 import AppLoading from 'expo-app-loading';
 import {TextInput,ScrollView} from 'react-native-gesture-handler'
@@ -16,6 +16,7 @@ import Dialog, {  DialogTitle,
     SlideAnimation,
     ScaleAnimation, } from 'react-native-popup-dialog';
 import { Fontisto, MaterialIcons  } from '@expo/vector-icons'; 
+import RangeSlider, { Slider } from 'react-native-range-slider-expo';
 
 export default class Home extends React.Component {
     state={
@@ -1119,16 +1120,15 @@ export default class Home extends React.Component {
         sortdisp:true,
         fontsLoaded: false,
         darkmode:false,
-        scaleAnimationDialog:false
+        scaleAnimationDialog:false,
+        setloginDialog:false,
+        minprice:0,
+        maxprice:50000,
+        searchtype:'ecom'
 
 
     }
-async componentDidMount(){
-    await Font.loadAsync({
-        'MaterialIcons': require('../fonts/MaterialIcons.ttf')
-      });
-      this.setState({ fontsLoaded : true})
-}
+
 updtvalue = (event) => {  
     // console.log(event.nativeEvent)  
     // const {eventCount, target, text} = event.nativeEvent;
@@ -1136,6 +1136,10 @@ updtvalue = (event) => {
   };
 sortdisplay = ()=>{
     this.setState({sortdisp:!this.state.sortdisp})
+   
+}
+changesearch = (name)=>{
+    this.setState({searchtype:name})
 }
 chngdisplay = ()=>{
     this.setState({darkmode:!this.state.darkmode})
@@ -1155,9 +1159,100 @@ sendval=(event)=>{
 
 }
     render(){
+        const styles = StyleSheet.create({
+            logincontainer: {
+              flex: 1,
+              backgroundColor: '#fff',
+              alignItems: 'center',
+              justifyContent: 'center',
+            },
+            inputView:{
+                width:"100%",
+               
+                
+                height:50,
+                marginBottom:80,
+                padding:20,
+                flex:1,
+                flexDirection: 'row'
+              },
+              inputText:{
+                height:50,
+                color:"black",
+                width:'40%',
+                borderColor: '#FF5722',
+                borderWidth:2,
+                borderRadius:25,
+               
+                textAlign: 'center',
+              },
+              logininputView:{
+                width:"80%",
+                backgroundColor:"#ffffff",
+                borderRadius:25,
+                height:50,
+                marginBottom:20,
+                justifyContent:"center",
+                padding:20,
+                borderColor: '#b3b3b3',
+                borderWidth:2,
+                marginLeft:'10%'
+              },
+              logininputText:{
+                height:50,
+                color:"black",
+                opacity:0.6
+              },
+              forgot:{
+                color:"#8a9db0",
+                fontSize:11
+              },
+              loginBtn:{
+                width:"80%",
+                backgroundColor:"#ff5a66",
+                borderRadius:25,
+                height:50,
+                alignItems:"center",
+                justifyContent:"center",
+                marginTop:10,
+                marginBottom:10,
+                marginLeft:'10%'
+              },
+              signupbtn:{
+                width:"80%",
+                backgroundColor:"white",
+                borderRadius:25,
+                height:50,
+                alignItems:"center",
+                justifyContent:"center",
+                marginTop:10,
+                marginBottom:10,
+                marginLeft:'10%',
+                borderColor: '#ff5a66',
+                borderWidth:2
+              },
+              textbox:{
+                width:"80%",
+                color:"black",
+                borderRadius:25,
+                height:20,
+                alignItems:"center",
+                justifyContent:"center",
+                marginTop:10,
+                marginBottom:10,
+                marginLeft:'10%'
+
+              },
+              loginText:{
+                color:'white'
+              },
+              siguptext:{
+                color:'#ff5a66'
+              }
+          });
 
         return(
-            this.state.fontsLoaded ? 
+     
 
             <ScrollView
             showsVerticalScrollIndicator={false}
@@ -1253,18 +1348,30 @@ sendval=(event)=>{
                     horizontal
                     showsHorizontalScrollIndicator={false}
                     >
-                        <TouchableOpacity style={{width: 48, height: 48, borderRadius: 48/ 2,backgroundColor:'#009688',textAlign: 'center', justifyContent:"center",marginLeft:20}} onPress={()=>{this.setState({scaleAnimationDialog:true})}}>
-                        <Fontisto name="money-symbol" size={24} style={{ paddingEnd: 0,  marginLeft:'25%' }} color="white"   />
+                        <TouchableOpacity style={{width: 64, height: 64, borderRadius: 64/ 2,backgroundColor:'#8a1d57',textAlign: 'center', justifyContent:"center",marginLeft:20}} >
+                        <Fontisto name="nav-icon-list-a" size={30} style={{ paddingEnd: 0,  marginLeft:'25%' }} color="white"   />
                         </TouchableOpacity>
-                        <TouchableOpacity style={{width: 48, height: 48, borderRadius: 48/ 2, backgroundColor: this.state.darkmode ?  'white' : 'black',textAlign: 'center', justifyContent:"center",marginLeft:20}} onPress={this.chngdisplay}>
-                        <Fontisto name={this.state.darkmode ? 'toggle-on' :"scissors2"} size={24} style={{ paddingEnd: 0, marginLeft:'25%'}} color={this.state.darkmode ? 'black' :"white"}   type='ellipse'/>
+                        <TouchableOpacity style={{width: 64, height: 64, borderRadius: 64/ 2,backgroundColor:'#009688',textAlign: 'center', justifyContent:"center",marginLeft:20}} onPress={()=>{this.setState({scaleAnimationDialog:true})}}>
+                        <Fontisto name="money-symbol" size={30} style={{ paddingEnd: 0,  marginLeft:'25%' }} color="white"   />
                         </TouchableOpacity>
-                        <TouchableOpacity style={{width: 48, height: 48, borderRadius: 48/ 2,backgroundColor:'#eb1561',textAlign: 'center', justifyContent:"center",marginLeft:20}}>
-                        <Fontisto name="spinner-cog" size={24} style={{ paddingEnd: 0,  marginLeft:'25%'}} color="white"   type='ellipse'/>
+                        <TouchableOpacity style={{width: 64, height: 64, borderRadius: 64/ 2, backgroundColor: this.state.darkmode ?  'white' : 'black',textAlign: 'center', justifyContent:"center",marginLeft:20}} onPress={this.chngdisplay}>
+                        <Fontisto name={this.state.darkmode ? 'toggle-on' :"scissors2"} size={30} style={{ paddingEnd: 0, marginLeft:'25%'}} color={this.state.darkmode ? 'black' :"white"}   type='ellipse'/>
                         </TouchableOpacity>
-                        <View style={{width: 48, height: 48, borderRadius: 48/ 2,backgroundColor:'#00bbd5',textAlign: 'center', justifyContent:"center",marginLeft:20}}>
-                        <Fontisto name="person" size={24} style={{ paddingEnd: 0,  marginLeft:'25%'}} color="white"   type='ellipse'/>
-                        </View>
+                        <TouchableOpacity style={{width: 64, height: 64, borderRadius: 64/ 2,backgroundColor:'#eb1561',textAlign: 'center', justifyContent:"center",marginLeft:20}}>
+                        <Fontisto name="spinner-cog" size={30} style={{ paddingEnd: 0,  marginLeft:'25%'}} color="white"   type='ellipse'/>
+                        </TouchableOpacity>
+                    {this.state.searchtype !== 'ecom' ?
+                        <TouchableOpacity style={{width: 64, height: 64, borderRadius: 64/ 2,backgroundColor:'#f75b54',textAlign: 'center', justifyContent:"center",marginLeft:20}} onPress={()=>{this.setState({searchtype:'ecom'})}}>
+                        <Fontisto name="shopping-bag-1" size={30} style={{ paddingEnd: 0,  marginLeft:'25%'}} color="white"  />
+                        </TouchableOpacity>
+                        :
+                        <TouchableOpacity style={{width: 64, height: 64, borderRadius: 64/ 2,backgroundColor:'#f75b54',textAlign: 'center', justifyContent:"center",marginLeft:20}} oonPress={()=>{console.log('fck');this.setState({searchtype:'food'})}}>
+                        <Fontisto name="cocktail" size={44} style={{ paddingEnd: 0,  marginLeft:'25%'}} color="white"   type='ellipse'/>
+                        </TouchableOpacity>
+                            }
+                        <TouchableOpacity style={{width: 64, height: 64, borderRadius: 64/ 2,backgroundColor:'#ff5a66',textAlign: 'center', justifyContent:"center",marginLeft:20}} onPress={()=>{this.setState({setloginDialog:true})}}>
+                        <Fontisto name="person" size={30} style={{ paddingEnd: 0,  marginLeft:'30%'}} color="white"   type='ellipse'/>
+                        </TouchableOpacity>
         <Dialog
           onTouchOutside={()=>{this.setState({scaleAnimationDialog:false})}}
           width={0.9}
@@ -1292,17 +1399,124 @@ sendval=(event)=>{
           ]}>
           <DialogContent>
             <View>
-              <Text>
-                Here is an example of scale animation dialog.
-                Close using back button press
-              </Text>
+            <RangeSlider min={0} max={50000}
+                         fromValueOnChange={(value) => {this.setState({minprice:value})}}
+                         toValueOnChange={(value) => {this.setState({maxprice:value})}}
+                         initialFromValue={this.state.minprice}
+                         initialToValue={this.state.maxprice}
+                         fromKnobColor='#f38522'
+                         toKnobColor='#f38522'
+                         inRangeBarColor = '#f3d2b4'
+                         outOfRangeBarColor='#d8d8d8'
+                         valueLabelsBackgroundColor = '#dc4e41'
+                    />
+                    <View style={styles.inputView} >
+                        <TextInput  
+                            style={styles.inputText}
+                            placeholder="Min price..." 
+                            keyboardType={'numeric'}
+                            placeholderTextColor="#003f5c"
+                            value={String(this.state.minprice)}
+                            onChangeText={text => this.setState({minprice:text})}/>
+                            <View style={{
+                         width:"15%",
+                         alignItems:"center",
+                         height:50,
+                        
+                     }}>
+                         <Text style={{
+                             fontSize:15,
+                             fontFamily:"Bold",
+                             color: "black",
+                             textAlign:'center',
+                             marginTop:15,
+                             
+                         }}>to</Text>
+                     </View>
+                            <TextInput  
+                            style={styles.inputText}
+                            placeholder="Max price ..." 
+                            keyboardType={'numeric'}
+                            value={String(this.state.maxprice)}
+                            placeholderTextColor="#003f5c"
+                            onChangeText={text => this.setState({maxprice:text})}/>
+                        </View>
+                    {/* <Text>to value:  {this.state.maxprice}</Text> */}
               <Button
                 title="Close"
+                style={{backgroundColor:'#dc4e41'}}
                 onPress={() => {
                     this.setState({scaleAnimationDialog:false})
                 }}
                 key="button-1"
               />
+            </View>
+          </DialogContent>
+        </Dialog>
+
+        <Dialog
+          onTouchOutside={()=>{this.setState({setloginDialog:false})}}
+          width={0.9}
+          visible={this.state.setloginDialog}
+          dialogAnimation={new ScaleAnimation()}
+          onHardwareBackPress={() => {
+            this.setState({setloginDialog:false})
+            console.log('onHardwareBackPress');
+            return true;
+          }}
+          dialogTitle={
+            <DialogTitle
+              title="Sign in"
+              hasTitleBar={false}
+              textStyle={{color:"#ff5a66", fontFamily:"Bold",
+              fontSize:22}}
+
+            />
+          }
+          actions={[
+            <DialogButton
+              text="DISMISS"
+              onPress={() => {
+                this.setState({setloginDialog:false})
+              }}
+              key="button-1"
+            />,
+          ]}>
+          <DialogContent>
+            <View styles={styles.loginContainer}>
+            <View style={styles.logininputView} >
+          <TextInput  
+            style={styles.logininputText}
+            placeholder="E-mail Address" 
+            placeholderTextColor="#003f5c"
+            onChangeText={text => this.setState({email:text})}/>
+        </View>
+        <View style={styles.logininputView} >
+          <TextInput  
+            secureTextEntry
+            style={styles.logininputText}
+            placeholder="Password" 
+            placeholderTextColor="#003f5c"
+            onChangeText={text => this.setState({password:text})}/>
+        </View>
+        <TouchableOpacity style={styles.loginBtn}>
+          <Text style={styles.loginText}>LOGIN</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.textbox}>
+          <Text >OR</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.signupbtn}>
+          <Text style={styles.siguptext}>Signup</Text>
+        </TouchableOpacity>
+                    {/* <Text>to value:  {this.state.maxprice}</Text> */}
+              {/* <Button
+                title="Close"
+                style={{backgroundColor:'#dc4e41'}}
+                onPress={() => {
+                    this.setState({setloginDialog:false})
+                }}
+                key="button-1"
+              /> */}
             </View>
           </DialogContent>
         </Dialog>
@@ -1470,7 +1684,7 @@ sendval=(event)=>{
 
 
             </ScrollView>
-            : <AppLoading/>
+
         );
     }
 }
